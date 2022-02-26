@@ -55,7 +55,7 @@ class TwitterAPICaller: BDBOAuth1SessionManager {
             failure(error)
         })
     }
-
+    
     func postRequest(url: String, parameters: [Any], success: @escaping () -> (), failure: @escaping (Error) -> ()){
         TwitterAPICaller.client?.post(url, parameters: parameters, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
             success()
@@ -64,4 +64,33 @@ class TwitterAPICaller: BDBOAuth1SessionManager {
         })
     }
     
+    func postTweet(tweetString: String, success: @escaping () -> (), failure: @escaping (Error) -> ()){
+        let url = "https://api.twitter.com/1.1/statuses/update.json"
+        TwitterAPICaller.client?.post(url, parameters: ["status": tweetString], progress: nil, success: {(task: URLSessionDataTask, response: Any?) in
+            success()},
+            failure: { (task: URLSessionDataTask?, error: Error) in failure(error)})
+        
+        
+        
+    }
+    
+    func favoriteTweet(tweedId:Int, success: @escaping () -> (), failure: @escaping (Error) -> ()){
+        let url = "https://api.twitter.com/1.1/favorites/create.json"
+        TwitterAPICaller.client?.post(url, parameters: ["id": tweedId], progress: nil, success: {(task: URLSessionDataTask, response: Any?) in
+            success()},
+            failure: { (task: URLSessionDataTask?, error: Error) in failure(error)})
+    }
+    
+    func unfavoriteTweet(tweedId:Int, success: @escaping () -> (), failure: @escaping (Error) -> ()){
+        let url = "https://api.twitter.com/1.1/favorites/destroy.json"
+        TwitterAPICaller.client?.post(url, parameters: ["id": tweedId], progress: nil, success: {(task: URLSessionDataTask, response: Any?) in
+            success()},
+            failure: { (task: URLSessionDataTask?, error: Error) in failure(error)})
+    }
+    func retweet(tweedId:Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        let url = "https://api.twitter.com/1.1/statuses/retweet/\(tweedId).json"
+        TwitterAPICaller.client?.post(url, parameters: ["id": tweedId], progress: nil, success: {(task: URLSessionDataTask, response: Any?) in
+            success()},
+            failure: { (task: URLSessionDataTask?, error: Error) in failure(error)})
+    }
 }
